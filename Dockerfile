@@ -2,8 +2,9 @@ FROM alpine:latest
 
 RUN apk add --no-cache ca-certificates unzip
 
-# Скачиваем версию специально для Render (amd64)
+# Версия PocketBase
 ARG PB_VERSION=0.39.4
+
 ADD https://github.com/pocketbase/pocketbase/releases/download/v\( {PB_VERSION}/pocketbase_ \){PB_VERSION}_linux_amd64.zip /tmp/pb.zip
 
 RUN unzip /tmp/pb.zip -d /pb/ && \
@@ -13,4 +14,5 @@ RUN unzip /tmp/pb.zip -d /pb/ && \
 WORKDIR /pb
 EXPOSE 8080
 
-CMD ["./pocketbase", "serve", "--http=0.0.0.0:8080"]
+# Просто запускаем PocketBase (без создания админа)
+CMD ["./pocketbase", "serve", "--http=0.0.0.0:$PORT"]
